@@ -9,44 +9,69 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         body { font-family: 'Noto Sans TC', sans-serif; }
-        /* 自訂滑桿顏色 */
         input[type=range] { accent-color: #0f766e; }
     </style>
 </head>
-<body class="bg-stone-50 min-h-screen pb-20">
+<body class="bg-stone-50 min-h-screen pb-32 relative">
 
+    <!-- 頂部導覽列 -->
     <div class="bg-[#fdfbf7] p-4 sticky top-0 z-10 border-b border-stone-200 flex items-center justify-between shadow-sm">
         <h1 class="text-lg font-bold text-teal-800 flex items-center gap-2">
             <i data-lucide="leaf" class="w-5 h-5"></i> ANAN 深度諮詢建檔
         </h1>
+        <button onclick="toggleSettings()" class="text-stone-500 p-2 hover:bg-stone-200 rounded-full transition-colors" title="系統設定">
+            <i data-lucide="settings" class="w-5 h-5"></i>
+        </button>
     </div>
 
-    <div class="max-w-3xl mx-auto p-5 space-y-6">
+    <!-- 設定 Modal (隱藏/顯示) -->
+    <div id="settingsModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-xl w-full max-w-md p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="font-bold text-teal-800 flex items-center gap-2">
+                    <i data-lucide="cloud" class="w-5 h-5"></i> 綁定資料庫
+                </h2>
+                <button onclick="toggleSettings()" class="text-stone-400 hover:text-stone-600">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <p class="text-sm text-stone-500 mb-4">請貼上 Google Apps Script 網址 (結尾為 /exec)。此網址會自動記憶在您的瀏覽器中。</p>
+            <textarea id="gasUrl" class="w-full p-4 bg-stone-50 rounded-2xl outline-none focus:ring-2 focus:ring-teal-500 border border-stone-200 text-sm mb-4 break-all h-32" placeholder="https://script.google.com/macros/s/..."></textarea>
+            <button onclick="toggleSettings()" class="w-full bg-teal-700 text-white p-3 rounded-xl font-bold hover:bg-teal-800 active:scale-95 transition-all">完成設定</button>
+        </div>
+    </div>
 
+    <div class="max-w-3xl mx-auto p-5 space-y-6 mt-2">
+
+        <!-- ==================== 深度諮詢表 ==================== -->
         <section class="bg-white p-6 rounded-3xl shadow-sm border border-stone-100">
             <h2 class="font-bold text-teal-800 mb-4 border-b border-teal-100 pb-2 flex items-center gap-2">
                 <i data-lucide="user" class="w-5 h-5"></i> 個案基本資料
             </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                 <div>
                     <label class="block text-sm font-bold text-stone-600 mb-1">姓名 *</label>
-                    <input type="text" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500" placeholder="輸入姓名">
+                    <input type="text" id="clientName" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500" placeholder="輸入姓名">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-stone-600 mb-1">電話</label>
+                    <input type="tel" id="clientPhone" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500" placeholder="輸入電話">
                 </div>
                 <div>
                     <label class="block text-sm font-bold text-stone-600 mb-1">職業 (工作型態)</label>
-                    <input type="text" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500" placeholder="例如：辦公室行政、自由業">
+                    <input type="text" id="clientJob" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500" placeholder="例如：辦公室行政">
                 </div>
             </div>
             <div>
                 <label class="block text-sm font-bold text-stone-600 mb-2">主訴問題面向</label>
-                <div class="flex flex-wrap gap-3">
-                    <label class="flex items-center gap-2 bg-stone-50 px-3 py-2 rounded-lg cursor-pointer hover:bg-teal-50"><input type="checkbox" class="accent-teal-600 w-4 h-4"> 事業</label>
-                    <label class="flex items-center gap-2 bg-stone-50 px-3 py-2 rounded-lg cursor-pointer hover:bg-teal-50"><input type="checkbox" class="accent-teal-600 w-4 h-4"> 感情</label>
-                    <label class="flex items-center gap-2 bg-stone-50 px-3 py-2 rounded-lg cursor-pointer hover:bg-teal-50"><input type="checkbox" class="accent-teal-600 w-4 h-4"> 關係</label>
-                    <label class="flex items-center gap-2 bg-stone-50 px-3 py-2 rounded-lg cursor-pointer hover:bg-teal-50"><input type="checkbox" class="accent-teal-600 w-4 h-4"> 財務</label>
+                <div class="flex flex-wrap gap-3" id="issueTags">
+                    <label class="flex items-center gap-2 bg-stone-50 px-3 py-2 rounded-lg cursor-pointer hover:bg-teal-50"><input type="checkbox" value="事業" class="accent-teal-600 w-4 h-4 issue-cb"> 事業</label>
+                    <label class="flex items-center gap-2 bg-stone-50 px-3 py-2 rounded-lg cursor-pointer hover:bg-teal-50"><input type="checkbox" value="感情" class="accent-teal-600 w-4 h-4 issue-cb"> 感情</label>
+                    <label class="flex items-center gap-2 bg-stone-50 px-3 py-2 rounded-lg cursor-pointer hover:bg-teal-50"><input type="checkbox" value="關係" class="accent-teal-600 w-4 h-4 issue-cb"> 關係</label>
+                    <label class="flex items-center gap-2 bg-stone-50 px-3 py-2 rounded-lg cursor-pointer hover:bg-teal-50"><input type="checkbox" value="財務" class="accent-teal-600 w-4 h-4 issue-cb"> 財務</label>
                     <div class="flex items-center gap-2 bg-stone-50 px-3 py-2 rounded-lg flex-1 min-w-[150px]">
-                        <input type="checkbox" class="accent-teal-600 w-4 h-4"> 其他
-                        <input type="text" class="bg-transparent border-b border-stone-300 w-full outline-none text-sm focus:border-teal-500" placeholder="請說明">
+                        <input type="checkbox" id="otherIssueCb" class="accent-teal-600 w-4 h-4"> 其他
+                        <input type="text" id="otherIssueText" class="bg-transparent border-b border-stone-300 w-full outline-none text-sm focus:border-teal-500" placeholder="請說明">
                     </div>
                 </div>
             </div>
@@ -56,20 +81,20 @@
             <h2 class="font-bold text-teal-800 mb-4 border-b border-teal-100 pb-2 flex items-center gap-2">
                 <i data-lucide="sparkles" class="w-5 h-5"></i> 占星命盤與行為模式
             </h2>
-            <div class="grid grid-cols-2 gap-4 mb-5">
-                <div><label class="block text-xs font-bold text-stone-500 mb-1">太陽</label><input type="text" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500"></div>
-                <div><label class="block text-xs font-bold text-stone-500 mb-1">月亮</label><input type="text" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500"></div>
-                <div><label class="block text-xs font-bold text-stone-500 mb-1">上升</label><input type="text" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500"></div>
-                <div><label class="block text-xs font-bold text-stone-500 mb-1">金星</label><input type="text" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500"></div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
+                <div><label class="block text-xs font-bold text-stone-500 mb-1">太陽</label><input type="text" id="sun" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500"></div>
+                <div><label class="block text-xs font-bold text-stone-500 mb-1">月亮</label><input type="text" id="moon" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500"></div>
+                <div><label class="block text-xs font-bold text-stone-500 mb-1">上升</label><input type="text" id="rising" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500"></div>
+                <div><label class="block text-xs font-bold text-stone-500 mb-1">金星</label><input type="text" id="venus" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500"></div>
             </div>
             <div>
                 <label class="block text-sm font-bold text-stone-600 mb-2">壓力來時的慣性反應</label>
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-                    <label class="flex items-center gap-2 bg-stone-50 px-3 py-2 rounded-lg cursor-pointer"><input type="radio" name="stress" class="accent-teal-600 w-4 h-4"> 過度理性分析</label>
-                    <label class="flex items-center gap-2 bg-stone-50 px-3 py-2 rounded-lg cursor-pointer"><input type="radio" name="stress" class="accent-teal-600 w-4 h-4"> 情緒爆發</label>
-                    <label class="flex items-center gap-2 bg-stone-50 px-3 py-2 rounded-lg cursor-pointer"><input type="radio" name="stress" class="accent-teal-600 w-4 h-4"> 逃避拖延</label>
-                    <label class="flex items-center gap-2 bg-stone-50 px-3 py-2 rounded-lg cursor-pointer"><input type="radio" name="stress" class="accent-teal-600 w-4 h-4"> 自責內耗</label>
-                    <label class="flex items-center gap-2 bg-stone-50 px-3 py-2 rounded-lg cursor-pointer"><input type="radio" name="stress" class="accent-teal-600 w-4 h-4"> 假裝沒事</label>
+                    <label class="flex items-center gap-2 bg-stone-50 px-3 py-2 rounded-lg cursor-pointer"><input type="radio" name="stress" value="過度理性分析" class="accent-teal-600 w-4 h-4"> 過度理性分析</label>
+                    <label class="flex items-center gap-2 bg-stone-50 px-3 py-2 rounded-lg cursor-pointer"><input type="radio" name="stress" value="情緒爆發" class="accent-teal-600 w-4 h-4"> 情緒爆發</label>
+                    <label class="flex items-center gap-2 bg-stone-50 px-3 py-2 rounded-lg cursor-pointer"><input type="radio" name="stress" value="逃避拖延" class="accent-teal-600 w-4 h-4"> 逃避拖延</label>
+                    <label class="flex items-center gap-2 bg-stone-50 px-3 py-2 rounded-lg cursor-pointer"><input type="radio" name="stress" value="自責內耗" class="accent-teal-600 w-4 h-4"> 自責內耗</label>
+                    <label class="flex items-center gap-2 bg-stone-50 px-3 py-2 rounded-lg cursor-pointer"><input type="radio" name="stress" value="假裝沒事" class="accent-teal-600 w-4 h-4"> 假裝沒事</label>
                 </div>
             </div>
         </section>
@@ -81,23 +106,23 @@
             <div class="space-y-4">
                 <div class="bg-stone-50 p-4 rounded-xl border border-stone-100">
                     <div class="flex justify-between mb-2"><label class="text-sm font-bold text-stone-700">行動力</label><span class="text-teal-700 font-bold" id="val-action">5 分</span></div>
-                    <input type="range" min="1" max="10" value="5" class="w-full" oninput="document.getElementById('val-action').innerText = this.value + ' 分'">
+                    <input type="range" id="scoreAction" min="1" max="10" value="5" class="w-full" oninput="document.getElementById('val-action').innerText = this.value + ' 分'">
                 </div>
                 <div class="bg-stone-50 p-4 rounded-xl border border-stone-100">
                     <div class="flex justify-between mb-2"><label class="text-sm font-bold text-stone-700">自信度</label><span class="text-teal-700 font-bold" id="val-conf">5 分</span></div>
-                    <input type="range" min="1" max="10" value="5" class="w-full" oninput="document.getElementById('val-conf').innerText = this.value + ' 分'">
+                    <input type="range" id="scoreConfidence" min="1" max="10" value="5" class="w-full" oninput="document.getElementById('val-conf').innerText = this.value + ' 分'">
                 </div>
                 <div class="bg-stone-50 p-4 rounded-xl border border-stone-100">
                     <div class="flex justify-between mb-2"><label class="text-sm font-bold text-stone-700">情緒穩定度</label><span class="text-teal-700 font-bold" id="val-emo">5 分</span></div>
-                    <input type="range" min="1" max="10" value="5" class="w-full" oninput="document.getElementById('val-emo').innerText = this.value + ' 分'">
+                    <input type="range" id="scoreEmotion" min="1" max="10" value="5" class="w-full" oninput="document.getElementById('val-emo').innerText = this.value + ' 分'">
                 </div>
                 <div class="bg-stone-50 p-4 rounded-xl border border-stone-100">
                     <div class="flex justify-between mb-2"><label class="text-sm font-bold text-stone-700">睡眠品質</label><span class="text-teal-700 font-bold" id="val-sleep">5 分</span></div>
-                    <input type="range" min="1" max="10" value="5" class="w-full" oninput="document.getElementById('val-sleep').innerText = this.value + ' 分'">
+                    <input type="range" id="scoreSleep" min="1" max="10" value="5" class="w-full" oninput="document.getElementById('val-sleep').innerText = this.value + ' 分'">
                 </div>
                 <div class="bg-stone-50 p-4 rounded-xl border border-stone-100">
                     <div class="flex justify-between mb-2"><label class="text-sm font-bold text-stone-700">身體疲勞度</label><span class="text-teal-700 font-bold" id="val-tired">5 分</span></div>
-                    <input type="range" min="1" max="10" value="5" class="w-full" oninput="document.getElementById('val-tired').innerText = this.value + ' 分'">
+                    <input type="range" id="scoreFatigue" min="1" max="10" value="5" class="w-full" oninput="document.getElementById('val-tired').innerText = this.value + ' 分'">
                 </div>
             </div>
         </section>
@@ -108,97 +133,147 @@
             </h2>
             <div class="mb-5 space-y-3">
                 <label class="block text-sm font-bold text-stone-600">目前最困擾的三件事</label>
-                <input type="text" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500" placeholder="1.">
-                <input type="text" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500" placeholder="2.">
-                <input type="text" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500" placeholder="3.">
+                <input type="text" id="trouble1" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500" placeholder="1.">
+                <input type="text" id="trouble2" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500" placeholder="2.">
+                <input type="text" id="trouble3" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500" placeholder="3.">
             </div>
             <div class="mb-5">
                 <label class="block text-sm font-bold text-stone-600 mb-1">最想改變的是什麼？</label>
-                <textarea class="w-full p-3 bg-stone-50 rounded-xl h-24 outline-none focus:ring-2 focus:ring-teal-500" placeholder="請描述..."></textarea>
+                <textarea id="troubleChange" class="w-full p-3 bg-stone-50 rounded-xl h-24 outline-none focus:ring-2 focus:ring-teal-500" placeholder="請描述..."></textarea>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-bold text-stone-600 mb-1">第一直覺喜歡的味道</label>
-                    <input type="text" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500">
+                    <input type="text" id="likeScent" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500">
                 </div>
                 <div>
                     <label class="block text-sm font-bold text-stone-600 mb-1">最排斥的味道</label>
-                    <input type="text" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500">
+                    <input type="text" id="dislikeScent" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500">
                 </div>
             </div>
         </section>
 
-        <div class="flex items-center gap-4 my-8">
-            <div class="h-px bg-stone-300 flex-1"></div>
-            <span class="text-stone-400 font-bold text-sm tracking-widest">芳療師填寫區</span>
-            <div class="h-px bg-stone-300 flex-1"></div>
-        </div>
-
-        <section class="bg-teal-50 p-6 rounded-3xl shadow-sm border border-teal-100">
-            <h2 class="font-bold text-teal-800 mb-4 border-b border-teal-200 pb-2 flex items-center gap-2">
-                <i data-lucide="clipboard-list" class="w-5 h-5"></i> 諮詢分析表
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div><label class="block text-sm font-bold text-stone-600 mb-1">諮詢日期</label><input type="date" class="w-full p-3 bg-white rounded-xl outline-none focus:ring-2 focus:ring-teal-500"></div>
-                <div><label class="block text-sm font-bold text-stone-600 mb-1">對應脈輪</label><input type="text" class="w-full p-3 bg-white rounded-xl outline-none focus:ring-2 focus:ring-teal-500" placeholder="例如：心輪、胃輪"></div>
-            </div>
-            <div class="mb-4">
-                <label class="block text-sm font-bold text-stone-600 mb-2">問題核心判斷</label>
-                <div class="flex flex-wrap gap-3">
-                    <label class="flex items-center gap-2 bg-white px-3 py-2 rounded-lg"><input type="checkbox" class="accent-teal-600 w-4 h-4"> 事業</label>
-                    <label class="flex items-center gap-2 bg-white px-3 py-2 rounded-lg"><input type="checkbox" class="accent-teal-600 w-4 h-4"> 感情</label>
-                    <label class="flex items-center gap-2 bg-white px-3 py-2 rounded-lg"><input type="checkbox" class="accent-teal-600 w-4 h-4"> 關係</label>
-                    <label class="flex items-center gap-2 bg-white px-3 py-2 rounded-lg"><input type="checkbox" class="accent-teal-600 w-4 h-4"> 財務</label>
-                </div>
-            </div>
-            <div class="mb-4">
-                <label class="block text-sm font-bold text-stone-600 mb-1">客戶想要達成目標</label>
-                <textarea class="w-full p-3 bg-white rounded-xl h-20 outline-none focus:ring-2 focus:ring-teal-500"></textarea>
-            </div>
-            <div>
-                <label class="block text-sm font-bold text-stone-600 mb-1">輔助牌卡 (選填)</label>
-                <input type="text" class="w-full p-3 bg-white rounded-xl outline-none focus:ring-2 focus:ring-teal-500" placeholder="記錄抽到的牌陣或神諭卡...">
-            </div>
-        </section>
-
-        <section class="bg-teal-700 p-6 rounded-3xl shadow-sm text-white">
-            <h2 class="font-bold text-white mb-4 border-b border-teal-600 pb-2 flex items-center gap-2">
-                <i data-lucide="droplet" class="w-5 h-5"></i> 客製精油處方
-            </h2>
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-teal-100 mb-1">精油配方紀錄</label>
-                    <textarea class="w-full p-4 bg-teal-800/50 rounded-xl h-28 outline-none focus:ring-2 focus:ring-teal-400 placeholder-teal-300/50 border border-teal-600" placeholder="真正薰衣草 3滴 + 甜橙 2滴..."></textarea>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-teal-100 mb-1">稀釋比例</label>
-                        <input type="text" class="w-full p-3 bg-teal-800/50 rounded-xl outline-none focus:ring-2 focus:ring-teal-400 border border-teal-600 placeholder-teal-300/50" placeholder="例如: 3%">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-teal-100 mb-1">預計改善時間</label>
-                        <input type="text" class="w-full p-3 bg-teal-800/50 rounded-xl outline-none focus:ring-2 focus:ring-teal-400 border border-teal-600 placeholder-teal-300/50" placeholder="例如: 2週">
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-teal-100 mb-1">使用方式 / 週期</label>
-                    <input type="text" class="w-full p-3 bg-teal-800/50 rounded-xl outline-none focus:ring-2 focus:ring-teal-400 border border-teal-600 placeholder-teal-300/50" placeholder="例如: 睡前塗抹肩頸與胸口">
-                </div>
-            </div>
-        </section>
-
+        <!-- 浮動儲存按鈕 -->
         <div class="fixed bottom-0 left-0 right-0 p-4 bg-white/80 backdrop-blur-md border-t border-stone-200 z-20">
             <div class="max-w-3xl mx-auto">
-                <button onclick="alert('前端展示完畢！若需串接後端，請將此表單整合至 React App 中。')" class="w-full bg-teal-800 text-white p-4 rounded-2xl font-bold flex justify-center items-center gap-2 hover:bg-teal-900 active:scale-95 transition-all shadow-lg">
-                    <i data-lucide="save" class="w-5 h-5"></i> 儲存個案與處方紀錄
+                <button id="saveBtn" onclick="submitData()" class="w-full bg-teal-800 text-white p-4 rounded-2xl font-bold flex justify-center items-center gap-2 hover:bg-teal-900 active:scale-95 transition-all shadow-lg">
+                    <i data-lucide="save" class="w-5 h-5"></i> 儲存送出表單
                 </button>
             </div>
         </div>
 
     </div>
 
+    <!-- 初始化圖示與設定檔 -->
     <script>
         lucide.createIcons();
+
+        // Modal 切換邏輯
+        function toggleSettings() {
+            const modal = document.getElementById('settingsModal');
+            modal.classList.toggle('hidden');
+        }
+
+        // 載入時，自動填入記憶的網址
+        document.getElementById('gasUrl').value = localStorage.getItem('ananGasUrl') || '';
+
+        // 監聽並儲存網址
+        document.getElementById('gasUrl').addEventListener('input', function() {
+            localStorage.setItem('ananGasUrl', this.value);
+        });
+
+        // 核心上傳功能
+        async function submitData() {
+            const gasUrl = document.getElementById('gasUrl').value;
+            const name = document.getElementById('clientName').value;
+
+            if (!gasUrl) {
+                alert("⚠️ 請先點擊右上角設定按鈕，貼上資料庫網址！");
+                toggleSettings();
+                return;
+            }
+            if (!gasUrl.includes('/exec')) return alert("⚠️ 網址格式錯誤，結尾必須是 /exec");
+            if (!name) return alert("⚠️ 請填寫個案姓名！");
+
+            const saveBtn = document.getElementById('saveBtn');
+            saveBtn.innerHTML = `<i data-lucide="loader" class="w-5 h-5 animate-spin"></i> 正在傳送至雲端...`;
+            saveBtn.classList.replace('bg-teal-800', 'bg-stone-500');
+            saveBtn.disabled = true;
+            lucide.createIcons();
+
+            try {
+                // 1. 整理【個案基本資料】
+                const clientId = Date.now();
+                
+                let stressRes = '';
+                const stressRadios = document.getElementsByName('stress');
+                for (let radio of stressRadios) { if (radio.checked) stressRes = radio.value; }
+
+                const clientPayload = {
+                    action: 'addClient',
+                    id: clientId,
+                    name: name,
+                    phone: document.getElementById('clientPhone').value,
+                    job: document.getElementById('clientJob').value,
+                    sun: document.getElementById('sun').value,
+                    moon: document.getElementById('moon').value,
+                    rising: document.getElementById('rising').value,
+                    venus: document.getElementById('venus').value,
+                    stressResponse: stressRes,
+                    likeScent: document.getElementById('likeScent').value,
+                    dislikeScent: document.getElementById('dislikeScent').value
+                };
+
+                // 2. 整理【深度諮詢】
+                let coreIssuesArray = [];
+                document.querySelectorAll('.issue-cb:checked').forEach(cb => coreIssuesArray.push(cb.value));
+                if (document.getElementById('otherIssueCb').checked) {
+                    coreIssuesArray.push("其他: " + document.getElementById('otherIssueText').value);
+                }
+                const coreIssueCombined = coreIssuesArray.join(', ');
+
+                const t1 = document.getElementById('trouble1').value;
+                const t2 = document.getElementById('trouble2').value;
+                const t3 = document.getElementById('trouble3').value;
+                const change = document.getElementById('troubleChange').value;
+                const troublesCombined = `1.${t1}\n2.${t2}\n3.${t3}\n想改變:${change}`;
+
+                const recordPayload = {
+                    action: 'addConsultation',
+                    id: clientId + 1, 
+                    clientId: clientId, 
+                    date: new Date().toISOString().split('T')[0], // 自動帶入當天日期
+                    coreIssue: coreIssueCombined,
+                    scoreAction: document.getElementById('scoreAction').value,
+                    scoreConfidence: document.getElementById('scoreConfidence').value,
+                    scoreEmotion: document.getElementById('scoreEmotion').value,
+                    scoreSleep: document.getElementById('scoreSleep').value,
+                    scoreFatigue: document.getElementById('scoreFatigue').value,
+                    troubles: troublesCombined
+                };
+
+                // 3. 傳送資料到 Google 試算表
+                const fetchConfig = { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, redirect: 'follow' };
+                
+                await fetch(gasUrl, { ...fetchConfig, body: JSON.stringify(clientPayload) });
+                await fetch(gasUrl, { ...fetchConfig, body: JSON.stringify(recordPayload) });
+
+                alert("✅ 儲存成功！資料已同步至您的 Google 試算表。");
+                
+                // 清空表單以利下一位填寫
+                window.scrollTo(0,0);
+                location.reload(); 
+
+            } catch (error) {
+                console.error(error);
+                alert("❌ 儲存失敗！請確認網址正確或網路連線。");
+            } finally {
+                saveBtn.innerHTML = `<i data-lucide="save" class="w-5 h-5"></i> 儲存送出表單`;
+                saveBtn.classList.replace('bg-stone-500', 'bg-teal-800');
+                saveBtn.disabled = false;
+                lucide.createIcons();
+            }
+        }
     </script>
 </body>
 </html>
