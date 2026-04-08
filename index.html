@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANAN Talk 深度芳療 CRM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; }
+        /* 自訂滑桿顏色 */
+        input[type=range] { accent-color: #0f766e; }
+    </style>
+</head>
+<body class="bg-stone-50 min-h-screen pb-20">
+
+    <div class="bg-[#fdfbf7] p-4 sticky top-0 z-10 border-b border-stone-200 flex items-center justify-between shadow-sm">
+        <h1 class="text-lg font-bold text-teal-800 flex items-center gap-2">
+            <i data-lucide="leaf" class="w-5 h-5"></i> ANAN 深度諮詢建檔
+        </h1>
+    </div>
+
+    <div class="max-w-3xl mx-auto p-5 space-y-6">
+
+        <section class="bg-white p-6 rounded-3xl shadow-sm border border-stone-100">
+            <h2 class="font-bold text-teal-800 mb-4 border-b border-teal-100 pb-2 flex items-center gap-2">
+                <i data-lucide="user" class="w-5 h-5"></i> 個案基本資料
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block text-sm font-bold text-stone-600 mb-1">姓名 *</label>
+                    <input type="text" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500" placeholder="輸入姓名">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-stone-600 mb-1">職業 (工作型態)</label>
+                    <input type="text" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500" placeholder="例如：辦公室行政、自由業">
+                </div>
+            </div>
+            <div>
+                <label class="block text-sm font-bold text-stone-600 mb-2">主訴問題面向</label>
+                <div class="flex flex-wrap gap-3">
+                    <label class="flex items-center gap-2 bg-stone-50 px-3 py-2 rounded-lg cursor-pointer hover:bg-teal-50"><input type="checkbox" class="accent-teal-600 w-4 h-4"> 事業</label>
+                    <label class="flex items-center gap-2 bg-stone-50 px-3 py-2 rounded-lg cursor-pointer hover:bg-teal-50"><input type="checkbox" class="accent-teal-600 w-4 h-4"> 感情</label>
+                    <label class="flex items-center gap-2 bg-stone-50 px-3 py-2 rounded-lg cursor-pointer hover:bg-teal-50"><input type="checkbox" class="accent-teal-600 w-4 h-4"> 關係</label>
+                    <label class="flex items-center gap-2 bg-stone-50 px-3 py-2 rounded-lg cursor-pointer hover:bg-teal-50"><input type="checkbox" class="accent-teal-600 w-4 h-4"> 財務</label>
+                    <div class="flex items-center gap-2 bg-stone-50 px-3 py-2 rounded-lg flex-1 min-w-[150px]">
+                        <input type="checkbox" class="accent-teal-600 w-4 h-4"> 其他
+                        <input type="text" class="bg-transparent border-b border-stone-300 w-full outline-none text-sm focus:border-teal-500" placeholder="請說明">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white p-6 rounded-3xl shadow-sm border border-stone-100">
+            <h2 class="font-bold text-teal-800 mb-4 border-b border-teal-100 pb-2 flex items-center gap-2">
+                <i data-lucide="sparkles" class="w-5 h-5"></i> 占星命盤與行為模式
+            </h2>
+            <div class="grid grid-cols-2 gap-4 mb-5">
+                <div><label class="block text-xs font-bold text-stone-500 mb-1">太陽</label><input type="text" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500"></div>
+                <div><label class="block text-xs font-bold text-stone-500 mb-1">月亮</label><input type="text" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500"></div>
+                <div><label class="block text-xs font-bold text-stone-500 mb-1">上升</label><input type="text" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500"></div>
+                <div><label class="block text-xs font-bold text-stone-500 mb-1">金星</label><input type="text" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500"></div>
+            </div>
+            <div>
+                <label class="block text-sm font-bold text-stone-600 mb-2">壓力來時的慣性反應</label>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    <label class="flex items-center gap-2 bg-stone-50 px-3 py-2 rounded-lg cursor-pointer"><input type="radio" name="stress" class="accent-teal-600 w-4 h-4"> 過度理性分析</label>
+                    <label class="flex items-center gap-2 bg-stone-50 px-3 py-2 rounded-lg cursor-pointer"><input type="radio" name="stress" class="accent-teal-600 w-4 h-4"> 情緒爆發</label>
+                    <label class="flex items-center gap-2 bg-stone-50 px-3 py-2 rounded-lg cursor-pointer"><input type="radio" name="stress" class="accent-teal-600 w-4 h-4"> 逃避拖延</label>
+                    <label class="flex items-center gap-2 bg-stone-50 px-3 py-2 rounded-lg cursor-pointer"><input type="radio" name="stress" class="accent-teal-600 w-4 h-4"> 自責內耗</label>
+                    <label class="flex items-center gap-2 bg-stone-50 px-3 py-2 rounded-lg cursor-pointer"><input type="radio" name="stress" class="accent-teal-600 w-4 h-4"> 假裝沒事</label>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white p-6 rounded-3xl shadow-sm border border-stone-100">
+            <h2 class="font-bold text-teal-800 mb-4 border-b border-teal-100 pb-2 flex items-center gap-2">
+                <i data-lucide="activity" class="w-5 h-5"></i> 能量流動狀態 (1-10分)
+            </h2>
+            <div class="space-y-4">
+                <div class="bg-stone-50 p-4 rounded-xl border border-stone-100">
+                    <div class="flex justify-between mb-2"><label class="text-sm font-bold text-stone-700">行動力</label><span class="text-teal-700 font-bold" id="val-action">5 分</span></div>
+                    <input type="range" min="1" max="10" value="5" class="w-full" oninput="document.getElementById('val-action').innerText = this.value + ' 分'">
+                </div>
+                <div class="bg-stone-50 p-4 rounded-xl border border-stone-100">
+                    <div class="flex justify-between mb-2"><label class="text-sm font-bold text-stone-700">自信度</label><span class="text-teal-700 font-bold" id="val-conf">5 分</span></div>
+                    <input type="range" min="1" max="10" value="5" class="w-full" oninput="document.getElementById('val-conf').innerText = this.value + ' 分'">
+                </div>
+                <div class="bg-stone-50 p-4 rounded-xl border border-stone-100">
+                    <div class="flex justify-between mb-2"><label class="text-sm font-bold text-stone-700">情緒穩定度</label><span class="text-teal-700 font-bold" id="val-emo">5 分</span></div>
+                    <input type="range" min="1" max="10" value="5" class="w-full" oninput="document.getElementById('val-emo').innerText = this.value + ' 分'">
+                </div>
+                <div class="bg-stone-50 p-4 rounded-xl border border-stone-100">
+                    <div class="flex justify-between mb-2"><label class="text-sm font-bold text-stone-700">睡眠品質</label><span class="text-teal-700 font-bold" id="val-sleep">5 分</span></div>
+                    <input type="range" min="1" max="10" value="5" class="w-full" oninput="document.getElementById('val-sleep').innerText = this.value + ' 分'">
+                </div>
+                <div class="bg-stone-50 p-4 rounded-xl border border-stone-100">
+                    <div class="flex justify-between mb-2"><label class="text-sm font-bold text-stone-700">身體疲勞度</label><span class="text-teal-700 font-bold" id="val-tired">5 分</span></div>
+                    <input type="range" min="1" max="10" value="5" class="w-full" oninput="document.getElementById('val-tired').innerText = this.value + ' 分'">
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white p-6 rounded-3xl shadow-sm border border-stone-100">
+            <h2 class="font-bold text-teal-800 mb-4 border-b border-teal-100 pb-2 flex items-center gap-2">
+                <i data-lucide="message-circle" class="w-5 h-5"></i> 核心困擾與感知
+            </h2>
+            <div class="mb-5 space-y-3">
+                <label class="block text-sm font-bold text-stone-600">目前最困擾的三件事</label>
+                <input type="text" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500" placeholder="1.">
+                <input type="text" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500" placeholder="2.">
+                <input type="text" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500" placeholder="3.">
+            </div>
+            <div class="mb-5">
+                <label class="block text-sm font-bold text-stone-600 mb-1">最想改變的是什麼？</label>
+                <textarea class="w-full p-3 bg-stone-50 rounded-xl h-24 outline-none focus:ring-2 focus:ring-teal-500" placeholder="請描述..."></textarea>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-bold text-stone-600 mb-1">第一直覺喜歡的味道</label>
+                    <input type="text" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-stone-600 mb-1">最排斥的味道</label>
+                    <input type="text" class="w-full p-3 bg-stone-50 rounded-xl outline-none focus:ring-2 focus:ring-teal-500">
+                </div>
+            </div>
+        </section>
+
+        <div class="flex items-center gap-4 my-8">
+            <div class="h-px bg-stone-300 flex-1"></div>
+            <span class="text-stone-400 font-bold text-sm tracking-widest">芳療師填寫區</span>
+            <div class="h-px bg-stone-300 flex-1"></div>
+        </div>
+
+        <section class="bg-teal-50 p-6 rounded-3xl shadow-sm border border-teal-100">
+            <h2 class="font-bold text-teal-800 mb-4 border-b border-teal-200 pb-2 flex items-center gap-2">
+                <i data-lucide="clipboard-list" class="w-5 h-5"></i> 諮詢分析表
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div><label class="block text-sm font-bold text-stone-600 mb-1">諮詢日期</label><input type="date" class="w-full p-3 bg-white rounded-xl outline-none focus:ring-2 focus:ring-teal-500"></div>
+                <div><label class="block text-sm font-bold text-stone-600 mb-1">對應脈輪</label><input type="text" class="w-full p-3 bg-white rounded-xl outline-none focus:ring-2 focus:ring-teal-500" placeholder="例如：心輪、胃輪"></div>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-bold text-stone-600 mb-2">問題核心判斷</label>
+                <div class="flex flex-wrap gap-3">
+                    <label class="flex items-center gap-2 bg-white px-3 py-2 rounded-lg"><input type="checkbox" class="accent-teal-600 w-4 h-4"> 事業</label>
+                    <label class="flex items-center gap-2 bg-white px-3 py-2 rounded-lg"><input type="checkbox" class="accent-teal-600 w-4 h-4"> 感情</label>
+                    <label class="flex items-center gap-2 bg-white px-3 py-2 rounded-lg"><input type="checkbox" class="accent-teal-600 w-4 h-4"> 關係</label>
+                    <label class="flex items-center gap-2 bg-white px-3 py-2 rounded-lg"><input type="checkbox" class="accent-teal-600 w-4 h-4"> 財務</label>
+                </div>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-bold text-stone-600 mb-1">客戶想要達成目標</label>
+                <textarea class="w-full p-3 bg-white rounded-xl h-20 outline-none focus:ring-2 focus:ring-teal-500"></textarea>
+            </div>
+            <div>
+                <label class="block text-sm font-bold text-stone-600 mb-1">輔助牌卡 (選填)</label>
+                <input type="text" class="w-full p-3 bg-white rounded-xl outline-none focus:ring-2 focus:ring-teal-500" placeholder="記錄抽到的牌陣或神諭卡...">
+            </div>
+        </section>
+
+        <section class="bg-teal-700 p-6 rounded-3xl shadow-sm text-white">
+            <h2 class="font-bold text-white mb-4 border-b border-teal-600 pb-2 flex items-center gap-2">
+                <i data-lucide="droplet" class="w-5 h-5"></i> 客製精油處方
+            </h2>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-teal-100 mb-1">精油配方紀錄</label>
+                    <textarea class="w-full p-4 bg-teal-800/50 rounded-xl h-28 outline-none focus:ring-2 focus:ring-teal-400 placeholder-teal-300/50 border border-teal-600" placeholder="真正薰衣草 3滴 + 甜橙 2滴..."></textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-teal-100 mb-1">稀釋比例</label>
+                        <input type="text" class="w-full p-3 bg-teal-800/50 rounded-xl outline-none focus:ring-2 focus:ring-teal-400 border border-teal-600 placeholder-teal-300/50" placeholder="例如: 3%">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-teal-100 mb-1">預計改善時間</label>
+                        <input type="text" class="w-full p-3 bg-teal-800/50 rounded-xl outline-none focus:ring-2 focus:ring-teal-400 border border-teal-600 placeholder-teal-300/50" placeholder="例如: 2週">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-teal-100 mb-1">使用方式 / 週期</label>
+                    <input type="text" class="w-full p-3 bg-teal-800/50 rounded-xl outline-none focus:ring-2 focus:ring-teal-400 border border-teal-600 placeholder-teal-300/50" placeholder="例如: 睡前塗抹肩頸與胸口">
+                </div>
+            </div>
+        </section>
+
+        <div class="fixed bottom-0 left-0 right-0 p-4 bg-white/80 backdrop-blur-md border-t border-stone-200 z-20">
+            <div class="max-w-3xl mx-auto">
+                <button onclick="alert('前端展示完畢！若需串接後端，請將此表單整合至 React App 中。')" class="w-full bg-teal-800 text-white p-4 rounded-2xl font-bold flex justify-center items-center gap-2 hover:bg-teal-900 active:scale-95 transition-all shadow-lg">
+                    <i data-lucide="save" class="w-5 h-5"></i> 儲存個案與處方紀錄
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
